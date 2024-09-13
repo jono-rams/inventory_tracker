@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inventory_tracker/models/inventory_item.dart';
 import 'package:inventory_tracker/models/inventory_movement.dart';
 
-
 class FirestoreItemService {
   static final ref = FirebaseFirestore.instance
       .collection('items')
