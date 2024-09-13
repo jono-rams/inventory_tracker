@@ -10,27 +10,39 @@ part 'inventory_provider.freezed.dart';
 @riverpod
 class InventoryNotifier extends _$InventoryNotifier {
   @override
-  Future<SetAndMapState> build() async {
-    final snapshot = await FirestoreItemService.getItemsOnce();
-    Set<InventoryItem> items = {};
-    Map<String, DocumentReference<InventoryItem>> docs = {};
-    for(var doc in snapshot.docs) {
-      items.add(doc.data());
-      docs[doc.data().id] = doc.reference;
+  SetAndMapState build() {
+    return const SetAndMapState(items: {}, docs: {});
+  }
+
+  Future<void> getAllItems() async {
+    try {
+      final snapshot = await FirestoreItemService.getItemsOnce();
+      Set<InventoryItem> items = {};
+      Map<String, DocumentReference<InventoryItem>> docs = {};
+      for(var doc in snapshot.docs) {
+        items.add(doc.data());
+        docs[doc.data().id] = doc.reference;
+      }
+      state = state.copyWith(
+        items: items,
+        docs: docs,
+      );
+    } catch (e) {
+      print('Error fetching from Firebase: $e');
     }
-    return SetAndMapState(items: items, docs: docs);
+
   }
 
   Future<void> addItem(InventoryItem item) async {
     try {
-      if(state.value!.items.contains(item)) {
+      if(state.items.contains(item)) {
         return;
       }
       final docRef = await FirestoreItemService.addItem(item);
-      state = AsyncValue.data(state.value!.copyWith(
-        items: {...state.value!.items, item},
-        docs: {...state.value!.docs, item.id: docRef},
-      ));
+      state = state.copyWith(
+        items: {...state.items, item},
+        docs: {...state.docs, item.id: docRef},
+      );
     } catch (e) {
       print('Error adding to Firebase: $e');
     }
@@ -38,13 +50,13 @@ class InventoryNotifier extends _$InventoryNotifier {
 
   Future<void> updateItem(InventoryItem item) async {
     try {
-      if(!state.value!.items.contains(item)) {
+      if(!state.items.contains(item)) {
         return;
       }
       await FirestoreItemService.updateItem(item);
 
-      final updatedItems = state.value!.items.map((i) => i.id == item.id ? item : i).toSet();
-      state = AsyncValue.data(state.value!.copyWith(items: updatedItems, docs: state.value!.docs));
+      final updatedItems = state.items.map((i) => i.id == item.id ? item : i).toSet();
+      state = state.copyWith(items: updatedItems, docs: state.docs);
     } catch(e) {
       print('Error updating in Firebase: $e');
     }

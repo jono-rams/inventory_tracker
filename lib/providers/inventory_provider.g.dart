@@ -6,12 +6,12 @@ part of 'inventory_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$inventoryNotifierHash() => r'95961d351b39bb748969da3b145b7d1fbd1e403f';
+String _$inventoryNotifierHash() => r'b25a61d19201fc0630c3fdaca3550062f2504531';
 
 /// See also [InventoryNotifier].
 @ProviderFor(InventoryNotifier)
-final inventoryNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    InventoryNotifier, SetAndMapState>.internal(
+final inventoryNotifierProvider =
+    AutoDisposeNotifierProvider<InventoryNotifier, SetAndMapState>.internal(
   InventoryNotifier.new,
   name: r'inventoryNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final inventoryNotifierProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$InventoryNotifier = AutoDisposeAsyncNotifier<SetAndMapState>;
+typedef _$InventoryNotifier = AutoDisposeNotifier<SetAndMapState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
