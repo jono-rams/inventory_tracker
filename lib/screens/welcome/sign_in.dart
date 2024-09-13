@@ -42,8 +42,15 @@ class _MyWidgetState extends State<SignInForm> {
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
+              cursorColor: Colors.white,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
               decoration: const InputDecoration(
                 labelText: 'Email address',
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                ),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -63,8 +70,15 @@ class _MyWidgetState extends State<SignInForm> {
             TextFormField(
               controller: _passwordController,
               obscureText: true,
+              cursorColor: Colors.white,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
               decoration: const InputDecoration(
                 labelText: 'Password',
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                ),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {

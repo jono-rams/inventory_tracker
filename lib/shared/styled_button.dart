@@ -11,7 +11,7 @@ class StyledButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        backgroundColor: Colors.blue[500],
+        backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5))
