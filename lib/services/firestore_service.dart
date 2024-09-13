@@ -11,8 +11,10 @@ class FirestoreItemService {
   );
 
   // add Item
-  static Future<void> addItem(InventoryItem item) async {
+  static Future<DocumentReference<InventoryItem>> addItem(InventoryItem item) async {
     await ref.doc(item.id).set(item);
+
+    return ref.doc(item.id);
   }
 
   // update Item
