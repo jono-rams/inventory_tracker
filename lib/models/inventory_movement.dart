@@ -5,6 +5,7 @@ class InventoryMovement {
 
   InventoryMovement({
     required this.id,
+    required this.user,
     required this.item,
     required this.itemDocRef,
     required this.quantity,
@@ -15,6 +16,7 @@ class InventoryMovement {
   });
 
   final String id;
+  final String user;
   late final InventoryItem item;
   final int quantity;
   final DateTime movementDate;
@@ -26,6 +28,7 @@ class InventoryMovement {
   Map<String, dynamic> toFirestore() {
     return {
       'id' : id,
+      'user' : user,
       'item' : itemDocRef,
       'quantity': quantity,
       'movementDate': movementDate.toIso8601String(),
@@ -41,6 +44,7 @@ class InventoryMovement {
       ){
     return InventoryMovement(
       id: snapshot.id,
+      user: snapshot['user'],
       itemDocRef: snapshot['item'],
       item: InventoryItem.fromDocumentSnapshot(snapshot['item']),
       quantity: int.parse(snapshot['quantity']),
