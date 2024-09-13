@@ -14,7 +14,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const StyledAppBarText('Flutter Auth'),
+        title: const StyledAppBarText('Vemco It Asset Management System'),
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
       ),
