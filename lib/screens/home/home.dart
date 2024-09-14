@@ -76,9 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     return name;
                   }).toSet();
 
-                  if (filteredItems.isEmpty && str.isNotEmpty) {
-                    invalidSearch = true;
-                  }
+                  invalidSearch = filteredItems.isEmpty && str.isNotEmpty;
                 });
               },
             ),
