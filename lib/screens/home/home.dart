@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inventory_tracker/models/inventory_item.dart';
 import 'package:inventory_tracker/providers/inventory_provider.dart';
+import 'package:inventory_tracker/screens/create/create.dart';
 import 'package:inventory_tracker/screens/home/item_card.dart';
 import 'package:inventory_tracker/services/auth_service.dart';
 import 'package:inventory_tracker/shared/styled_text.dart';
@@ -95,7 +96,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: FilledButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (ctx) => const CreateItemScreen(),
+                ));
+              },
               child: const Text('Add New Item'),
             ),
           ),

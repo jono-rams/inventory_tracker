@@ -7,7 +7,7 @@ class InventoryItem {
     required this.tags,
     required this.quantity,
     required this.description,
-    this.serialTag,
+    required this.serialTag,
   });
 
   final String id;
@@ -15,7 +15,7 @@ class InventoryItem {
   final List<String> tags;
   final int quantity;
   final String description;
-  final String? serialTag;
+  final String serialTag;
 
   Map<String, dynamic> toFirestore() {
     return {
@@ -24,7 +24,7 @@ class InventoryItem {
       'tags': tags,
       'quantity': quantity,
       'description': description,
-      if(serialTag != null) 'serialTag': serialTag,
+      'serialTag': serialTag,
     };
   }
 
@@ -40,7 +40,7 @@ class InventoryItem {
           ),
           quantity: snapshot['quantity'] as int,
           description: snapshot['description'] as String,
-          serialTag: snapshot['serialTag'] as String?,
+          serialTag: snapshot['serialTag'] as String,
         );
     }
 
@@ -53,7 +53,7 @@ class InventoryItem {
       ),
       quantity: doc['quantity'] as int,
       description: doc['description'] as String,
-      serialTag: doc['serialTag'] as String?,
+      serialTag: doc['serialTag'] as String,
     );
   }
 }
