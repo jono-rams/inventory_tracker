@@ -21,6 +21,7 @@ class FirestoreItemService {
   static Future<void> updateItem(InventoryItem item) async {
     await ref.doc(item.id).update({
       'quantity' : item.quantity,
+      'tags' : item.tags,
     });
   }
 
