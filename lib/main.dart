@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inventory_tracker/models/app_user.dart';
 import 'package:inventory_tracker/providers/auth_provider.dart';
-import 'package:inventory_tracker/screens/profile/profile.dart';
+import 'package:inventory_tracker/screens/home/home.dart';
 import 'package:inventory_tracker/screens/welcome/welcome.dart';
 import 'firebase_options.dart';
 
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             if (value == null) {
               return const WelcomeScreen();
             } else {
-              return ProfileScreen(user: value);
+              return const HomeScreen();
             }
           },
           error: (error, _) => const Text('Error loading auth status...'),
