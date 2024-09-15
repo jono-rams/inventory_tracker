@@ -77,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onPressed: () {
               AuthService.signOut();
             },
-            icon: const Icon(Icons.exit_to_app_sharp),
+            icon: const Icon(Icons.exit_to_app_sharp, color: Colors.white,),
           )
         ],
       ),
