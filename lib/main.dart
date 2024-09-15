@@ -30,6 +30,9 @@ class MyApp extends StatelessWidget {
       title: 'Vemco IT Asset Manager',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
         useMaterial3: true,
       ),
       home: Consumer(builder: (context, ref, child) {
