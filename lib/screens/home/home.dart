@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inventory_tracker/models/inventory_item.dart';
-import 'package:inventory_tracker/models/inventory_movement.dart';
 import 'package:inventory_tracker/providers/inventory_provider.dart';
-import 'package:inventory_tracker/providers/movement_provider.dart';
 import 'package:inventory_tracker/screens/create/create.dart';
 import 'package:inventory_tracker/screens/home/item_card.dart';
 import 'package:inventory_tracker/services/auth_service.dart';
@@ -18,7 +17,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   SetAndMapState allItems = const SetAndMapState(items: {}, docs: {});
-  List<InventoryMovement> allMovements = [];
   Set<InventoryItem> filteredItems = {};
   bool invalidSearch = false;
 
@@ -60,13 +58,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     allItems = ref.watch(inventoryNotifierProvider);
     if (filteredItems.isEmpty && !invalidSearch) {
       filteredItems = allItems.items;
     }
-    allMovements = ref.watch(movementNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -102,44 +97,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ListView.builder(
               itemCount: filteredItems.length,
               itemBuilder: (_, index) {
-                return ItemCard(item: filteredItems.elementAt(index));
+                return ItemCard(item: filteredItems.elementAt(index), itemRef: allItems.docs[filteredItems.elementAt(index).id]!);
               },
             ),
           ),
         ],
       ),
-      floatingActionButton: Stack(alignment: Alignment.bottomCenter, children: [
-        Positioned(
-          bottom: 20.0,
-          right: screenWidth / 2 + 10,
-          child: FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => const CreateItemScreen(),
-                  ));
-            },
-            label: const Text('Add New Item'),
-            icon: const Icon(Icons.add),
-          ),
-        ),
-        Positioned(
-          bottom: 20.0,
-          left: screenWidth / 2 + 10,
-          child: FloatingActionButton.extended(
-            onPressed: () {
-              // Navigator.pushReplacement(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (ctx) => const CreateItemScreen(),
-              //     ));
-            },
-            label: const Text('View Movements'),
-            icon: const Icon(Icons.history),
-          ),
-        ),
-      ]),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (ctx) => const CreateItemScreen(),
+              ));
+        },
+        label: const Text('Add New Item'),
+        icon: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: kIsWeb ? FloatingActionButtonLocation.centerFloat : FloatingActionButtonLocation.endFloat,
     );
   }
 }
