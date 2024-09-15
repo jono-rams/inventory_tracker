@@ -79,7 +79,7 @@ class _CreateItemScreenState extends ConsumerState<CreateItemScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (ctx) => const HomeScreen(),
+            builder: (ctx) => HomeScreen(userId: user.value!.uid,),
           ));
     });
   }
@@ -98,7 +98,7 @@ class _CreateItemScreenState extends ConsumerState<CreateItemScreen> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (ctx) => const HomeScreen(),
+                  builder: (ctx) => HomeScreen(userId: user.value!.uid,),
                 ));
           },
           icon: Icon(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inventory_tracker/models/inventory_item.dart';
+import 'package:inventory_tracker/providers/auth_provider.dart';
 import 'package:inventory_tracker/providers/inventory_provider.dart';
 import 'package:inventory_tracker/screens/create/create.dart';
 import 'package:inventory_tracker/screens/home/item_card.dart';
@@ -9,7 +10,9 @@ import 'package:inventory_tracker/services/auth_service.dart';
 import 'package:inventory_tracker/shared/styled_text.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.userId});
+
+  final String userId;
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -23,6 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     ref.read(inventoryNotifierProvider.notifier).getAllItems();
+    ref.read(userNameNotifierProvider.notifier).getName(widget.userId);
     super.initState();
   }
 

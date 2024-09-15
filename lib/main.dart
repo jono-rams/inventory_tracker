@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             if (value == null) {
               return const WelcomeScreen();
             } else {
-              return const HomeScreen();
+              return HomeScreen(userId: value.uid);
             }
           },
           error: (error, _) => const Text('Error loading auth status...'),
