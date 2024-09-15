@@ -64,4 +64,7 @@ class FirestoreMovementService {
   }
 
   // get movements by item
+  static Future<QuerySnapshot<InventoryMovement>> getMovementsByItem(DocumentReference item) {
+    return ref.where('item', isEqualTo: item.path).get();
+  }
 }

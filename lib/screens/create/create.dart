@@ -65,7 +65,6 @@ class _CreateItemScreenState extends ConsumerState<CreateItemScreen> {
     InventoryMovement movement = InventoryMovement(
       id: uuid.v4(),
       user: user.value!.uid,
-      item: item,
       itemDocRef: doc!,
       quantity: _quantity,
       movementDate: DateTime.now(),
