@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inventory_tracker/models/app_user.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inventory_tracker/services/firestore_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
