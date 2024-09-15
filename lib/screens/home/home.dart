@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inventory_tracker/models/inventory_item.dart';
+import 'package:inventory_tracker/models/inventory_movement.dart';
 import 'package:inventory_tracker/providers/inventory_provider.dart';
+import 'package:inventory_tracker/providers/movement_provider.dart';
 import 'package:inventory_tracker/screens/create/create.dart';
 import 'package:inventory_tracker/screens/home/item_card.dart';
 import 'package:inventory_tracker/services/auth_service.dart';
@@ -16,6 +18,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   SetAndMapState allItems = const SetAndMapState(items: {}, docs: {});
+  List<InventoryMovement> allMovements = [];
   Set<InventoryItem> filteredItems = {};
   bool invalidSearch = false;
 
@@ -25,12 +28,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
   }
 
+  void handleSearch(String str) {
+    setState(() {
+      filteredItems = allItems.items.where((item) {
+        List<String> splitString = str.split(',');
+
+        bool nameOrSerial = splitString.any((individualString) {
+          final trimmedString = individualString.trim();
+          return (item.name.toLowerCase().contains(trimmedString) ||
+                  item.serialTag.toLowerCase().contains(trimmedString)) &&
+              trimmedString != "";
+        });
+
+        if (item.tags.isNotEmpty) {
+          bool tag = item.tags.any((t) {
+            return splitString.any((individualTag) {
+              return t
+                      .toLowerCase()
+                      .contains(individualTag.toLowerCase().trim()) &&
+                  individualTag.trim() != "";
+            });
+          });
+          return nameOrSerial || tag;
+        }
+        return nameOrSerial;
+      }).toSet();
+
+      invalidSearch = filteredItems.isEmpty && str.isNotEmpty;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     allItems = ref.watch(inventoryNotifierProvider);
     if (filteredItems.isEmpty && !invalidSearch) {
       filteredItems = allItems.items;
     }
+    allMovements = ref.watch(movementNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -58,27 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 minHeight: 50,
               ),
               onChanged: (str) {
-                setState(() {
-                  filteredItems = allItems.items.where((item) {
-                    List<String> splitString = str.split(',');
-
-                    bool name = splitString.any((individualString) {
-                      return item.name.toLowerCase().contains(individualString.toLowerCase().trim()) && individualString.trim() != "";
-                    });
-
-                    if (item.tags.isNotEmpty) {
-                      bool tag = item.tags.any((t) {
-                        return splitString.any((individualTag) {
-                          return t.toLowerCase().contains(individualTag.toLowerCase().trim()) && individualTag.trim() != "";
-                        });
-                      });
-                      return name || tag;
-                    }
-                    return name;
-                  }).toSet();
-
-                  invalidSearch = filteredItems.isEmpty && str.isNotEmpty;
-                });
+                handleSearch(str);
               },
             ),
           ),
@@ -90,22 +106,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
           ),
-          const SizedBox(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: FilledButton(
-              onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (ctx) => const CreateItemScreen(),
-                ));
-              },
-              child: const Text('Add New Item'),
-            ),
-          ),
         ],
       ),
+      floatingActionButton: Stack(alignment: Alignment.bottomCenter, children: [
+        Positioned(
+          bottom: 20.0,
+          right: screenWidth / 2 + 10,
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => const CreateItemScreen(),
+                  ));
+            },
+            label: const Text('Add New Item'),
+            icon: const Icon(Icons.add),
+          ),
+        ),
+        Positioned(
+          bottom: 20.0,
+          left: screenWidth / 2 + 10,
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              // Navigator.pushReplacement(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (ctx) => const CreateItemScreen(),
+              //     ));
+            },
+            label: const Text('View Movements'),
+            icon: const Icon(Icons.history),
+          ),
+        ),
+      ]),
     );
   }
 }

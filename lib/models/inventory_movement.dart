@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:inventory_tracker/models/inventory_item.dart';
 
 class InventoryMovement {
@@ -10,20 +11,20 @@ class InventoryMovement {
     required this.itemDocRef,
     required this.quantity,
     required this.movementDate,
-    required this.isReceived,
     this.toWho,
     required this.comments,
-  });
+  }) : dateString = DateFormat('yyyy-MM-dd').format(movementDate), isReceived = quantity > 0 ? true : false;
 
   final String id;
   final String user;
   late final InventoryItem item;
   final int quantity;
   final DateTime movementDate;
+  final String dateString;
   final bool isReceived;
   final String? toWho;
   final String comments;
-  final DocumentReference itemDocRef;
+  final DocumentReference<InventoryItem> itemDocRef;
 
   Map<String, dynamic> toFirestore() {
     return {
@@ -31,9 +32,8 @@ class InventoryMovement {
       'user' : user,
       'item' : itemDocRef,
       'quantity': quantity,
-      'movementDate': movementDate.toIso8601String(),
-      'isReceived': isReceived,
-      if(toWho != null) 'toWho': toWho,
+      'movementDate': dateString,
+      'toWho': toWho ?? '',
       'comments': comments,
     };
   }
@@ -48,8 +48,7 @@ class InventoryMovement {
       itemDocRef: snapshot['item'],
       item: InventoryItem.fromDocumentSnapshot(snapshot['item']),
       quantity: int.parse(snapshot['quantity']),
-      movementDate: DateTime.parse(snapshot['movementDate']),
-      isReceived: bool.parse(snapshot['isReceived']),
+      movementDate: DateFormat('yyyy-MM-dd').parse(snapshot['movementDate']),
       toWho: snapshot['toWho'],
       comments: snapshot['comments'],
     );

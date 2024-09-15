@@ -30,22 +30,23 @@ class InventoryNotifier extends _$InventoryNotifier {
     } catch (e) {
       print('Error fetching from Firebase: $e');
     }
-
   }
 
-  Future<void> addItem(InventoryItem item) async {
+  Future<DocumentReference<InventoryItem>?> addItem(InventoryItem item) async {
     try {
       if(state.items.contains(item)) {
-        return;
+        return state.docs[item.id];
       }
       final docRef = await FirestoreItemService.addItem(item);
       state = state.copyWith(
         items: {...state.items, item},
         docs: {...state.docs, item.id: docRef},
       );
+      return docRef;
     } catch (e) {
       print('Error adding to Firebase: $e');
     }
+    return null;
   }
 
   Future<void> updateItem(InventoryItem item) async {
