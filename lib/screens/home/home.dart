@@ -101,24 +101,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ListView.builder(
               itemCount: filteredItems.length,
               itemBuilder: (_, index) {
-                return ItemCard(item: filteredItems.elementAt(index), itemRef: allItems.docs[filteredItems.elementAt(index).id]!);
+                return ItemCard(
+                    item: filteredItems.elementAt(index),
+                    itemRef: allItems.docs[filteredItems.elementAt(index).id]!);
               },
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushReplacement(
+        onPressed: () async {
+          final bool val = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (ctx) => const CreateItemScreen(),
               ));
+          if (val) {
+            setState(() {
+              filteredItems = {};
+              invalidSearch = false;
+            });
+          }
         },
         label: const Text('Add New Item'),
         icon: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: kIsWeb ? FloatingActionButtonLocation.centerFloat : FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: kIsWeb
+          ? FloatingActionButtonLocation.centerFloat
+          : FloatingActionButtonLocation.endFloat,
     );
   }
 }

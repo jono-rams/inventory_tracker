@@ -6,7 +6,6 @@ import 'package:inventory_tracker/models/inventory_movement.dart';
 import 'package:inventory_tracker/providers/auth_provider.dart';
 import 'package:inventory_tracker/providers/inventory_provider.dart';
 import 'package:inventory_tracker/providers/movement_provider.dart';
-import 'package:inventory_tracker/screens/home/home.dart';
 import 'package:inventory_tracker/shared/styled_text.dart';
 import 'package:uuid/uuid.dart';
 
@@ -75,11 +74,7 @@ class _CreateItemScreenState extends ConsumerState<CreateItemScreen> {
 
     setState(() {
       _isLoading = false;
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (ctx) => HomeScreen(userId: user.value!.uid,),
-          ));
+      Navigator.pop(context, true);
     });
   }
 
@@ -92,19 +87,6 @@ class _CreateItemScreenState extends ConsumerState<CreateItemScreen> {
         title: const StyledAppBarText('Add New Item'),
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) => HomeScreen(userId: user.value!.uid,),
-                ));
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
       ),
       body: MouseRegion(
         cursor: _isLoading ? SystemMouseCursors.wait : SystemMouseCursors.click, // Change cursor based on _isLoading
